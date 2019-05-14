@@ -20,5 +20,16 @@ namespace PA6_Hamming
 
             return temp;
         }
+        public static int[][] GetParityMatrix()
+        {
+            int[][] temp = new int[3][];
+
+            temp[0] = new int[7] { 1, 0, 1, 0, 1, 0, 1 };
+            temp[1] = new int[7] { 0, 1, 1, 0, 0, 1, 1 };
+            temp[2] = new int[7] { 0, 0, 0, 1, 1, 1, 1 };
+
+            return temp;
+
+        }
     }
 }
