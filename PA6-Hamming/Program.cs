@@ -10,9 +10,11 @@ namespace PA6_Hamming
     {
         static int Main(string[] args)
         {
-            //encode ABC.txt to ABC.txt.coded
+            //EncodeFile("sample.txt");
+            //DecodeFile("sample.txt.coded");
             if(args.Length != 2)
             {
+                //encode ABC.txt to ABC.txt.coded
                 Console.WriteLine("Expected format: PA6.exe <encode / decode> <file_name>");
                 return 0;
             }
@@ -38,12 +40,11 @@ namespace PA6_Hamming
 
         static void EncodeFile(string fileName)
         {
-            List<string> text = ParseText($"../../../{fileName}");
+            List<string> text = ParseText(fileName);
             var binaryMap = GetBinary(text);
             var hammingMap = GetHamming(binaryMap);
             
-            //string txtToFile = "";
-            using (FileStream stream = new FileStream($"../../../{fileName}.coded", FileMode.Create))
+            using (FileStream stream = new FileStream($"{fileName}.coded", FileMode.Create))
             {
                 using (BinaryWriter bw = new BinaryWriter(stream))
                 {
@@ -56,13 +57,12 @@ namespace PA6_Hamming
                     }
                 }
             }
-            //File.WriteAllText($"../../../{ fileName }", txtToFile);
             return;
         }
         static void DecodeFile(string fileName)
         {
             // split string into 8 bit strings
-            List<string> bin = ParseBinary("sample1.txt.coded");
+            List<string> bin = ParseBinary(fileName);
             int errors = 0;
             List<string> binaryDecoded = DecodeBits(bin, ref errors);
             if(errors > 0)
@@ -92,6 +92,8 @@ namespace PA6_Hamming
             }
             Byte[] getChar = binList.ToArray();
             var txt = Encoding.ASCII.GetString(getChar);
+
+            File.WriteAllText(fileName + ".decoded.txt", txt);
 
             return;
         }
@@ -189,14 +191,13 @@ namespace PA6_Hamming
 
             }
             */
-            byte[] fileBytes = File.ReadAllBytes($"../../../{fileName}");
+            byte[] fileBytes = File.ReadAllBytes(fileName);
             StringBuilder sb = new StringBuilder();
             foreach (byte b in fileBytes)
             {
                 sb.Append(b.ToString());
             }
             string workString = sb.ToString();
-            int ln = workString.Length;
             for(int i = 0; i < workString.Length; i += 8)
             {
                 list.Add(workString.Substring(i, 8));
